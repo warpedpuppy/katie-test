@@ -27,13 +27,13 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 //mongoose.connect('mongodb://localhost:27017/superFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
-let connected = "not connected";
+let connected = "connecting";
 mongoose.connect(
   process.env.CONNECTION_URI || "mongodb://localhost:27017/superFlixDB",
   { useNewUrlParser: true, useUnifiedTopology: true }
 )
-.then(res => connected = "connected")
-.catch(res => connected = "error")
+.then(res => console.log('connected to db'))
+.catch(res => console.log('error connecting to db'))
 
 
 app.post('/', (req, res) => {
