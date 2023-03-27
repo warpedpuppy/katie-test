@@ -56,7 +56,7 @@ require("./passport");
 
 // Returning a welcome message
 app.get("/", (_req, res) => {
-  res.send("<h1>Welcome to SuperFlix!</h1>");
+  res.send("<h1> Welcome to SuperFlix ! </h1>");
 });
 
 // Returning the list of all movies
