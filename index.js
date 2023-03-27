@@ -1,30 +1,9 @@
-const express = require("express");
-bodyParser = require("body-parser");
-uuid = require("uuid");
+const express = require('express');
 
-const { check, validationResult } = require("express-validator");
-
-const morgan = require("morgan");
 const app = express();
-const mongoose = require("mongoose");
-const Models = require("./models.js");
-
-
-// Logging middleware
-app.use(morgan("common"));
-
-// For the sending of static files
-app.use(express.static("public"));
-app.use(bodyParser.json());
 
 const cors = require("cors");
-let allowedOrigins = [
-  "https://superflixheroes.netlify.app",
-  "http://localhost:1234",
-  "http://localhost:3000",
-  "http://localhost:4200",
-  "https://movie-api-k8molony.vercel.app",
-];
+let allowedOrigins = ['http://localhost:3000', 'https://superlative-snickerdoodle-531b46.netlify.app'];
 
 app.use(
   cors({
@@ -41,37 +20,34 @@ app.use(
   })
 );
 
-// Adding Passport authentication
-let auth = require("./auth")(app);
-const passport = require("passport");
-require("./passport");
+const mongoose = require("mongoose");
+const Models = require("./models.js");
 
-// Returning a welcome message
-app.get("/", (_req, res) => {
-  res.send("<h1> Welcome to SuperFlix ! </h1>");
-});
+const Movies = Models.Movie;
+const Users = Models.User;
+
+//mongoose.connect('mongodb://localhost:27017/superFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
+let connected = "not connected";
+mongoose.connect(
+  process.env.CONNECTION_URI || "mongodb://localhost:27017/superFlixDB",
+  { useNewUrlParser: true, useUnifiedTopology: true }
+)
+.then(res => connected = "connected")
+.catch(res => connected = "error")
+
 
 app.post('/', (req, res) => {
-	res.json({success: 'success', cx: process.env.CONNECTION_URI})
+	res.json({success: 'success', connected})
 })
 
 app.put('/', (req, res) => {
-	res.send({success: 'success'})
+	res.send({success: 'success', connected})
 })
 app.delete('/', (req, res) => {
-	res.send({success: 'success'})
+	res.send({success: 'success', connected})
+})
+app.get('/', (req, res) => {
+	res.send({success: 'success', connected})
 })
 
-
-
-// Error handler
-app.use((err, _req, res, _next) => {
-  console.error(err.stack);
-  res.status(500).send("Something broke!");
-});
-
-const port = process.env.PORT || 8080;
-app.listen(port, "0.0.0.0", () => {
-  console.log("SuperFlix is listening on Port " + port);
-});
-module.exports = app;
+app.listen(8080, () => console.log('success'))
