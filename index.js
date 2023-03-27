@@ -42,7 +42,16 @@ mongoose.connect(
 .catch(res => console.log('error connecting to db'))
 
 
-app.post('/', (req, res) => {
+// Adding Passport authentication
+let auth = require("./auth")(app);
+const passport = require("passport");
+require("./passport");
+
+
+
+
+
+app.post('/users', (req, res) => {
 	res.json({success: 'success', connected})
 })
 
@@ -52,9 +61,19 @@ app.put('/', (req, res) => {
 app.delete('/', (req, res) => {
 	res.send({success: 'success', connected})
 })
-app.get('/', async (req, res) => {
-	let movies = await Movies.find();
-	res.send({success: 'success', connected, movies})
-})
+// Returning the list of all movies
+app.get(
+	"/movies",
+	(req, res) => {
+	  Movies.find()
+		.then((movies) => {
+		  res.status(201).json(movies);
+		})
+		.catch((error) => {
+		  console.error(error);
+		  res.status(500).send("Error: " + error);
+		});
+	}
+  );
 
 app.listen(8080, () => console.log('success'))
