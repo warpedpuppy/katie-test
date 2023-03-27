@@ -1,4 +1,10 @@
-const express = require('express');
+
+const express = require("express");
+const bodyParser = require("body-parser");
+const uuid = require("uuid");
+
+const { check, validationResult } = require("express-validator");
+
 
 const app = express();
 
@@ -46,8 +52,9 @@ app.put('/', (req, res) => {
 app.delete('/', (req, res) => {
 	res.send({success: 'success', connected})
 })
-app.get('/', (req, res) => {
-	res.send({success: 'success', connected})
+app.get('/', async (req, res) => {
+	let movies = await Movies.find();
+	res.send({success: 'success', connected, movies})
 })
 
 app.listen(8080, () => console.log('success'))
