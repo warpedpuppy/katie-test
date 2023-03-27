@@ -20,6 +20,9 @@ app.use(
   })
 );
 
+app.post('/users', (req, res) => {
+	res.send('success')
+})
 
 app.get('/', (req, res) => {
 	res.send('success')
