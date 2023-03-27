@@ -21,11 +21,11 @@ app.use(
 );
 
 app.post('/users', (req, res) => {
-	res.send('success')
+	res.json({success: 'success'})
 })
 
 app.get('/', (req, res) => {
-	res.send('success')
+	res.json({success: 'success'})
 })
 
 app.listen(8080, () => console.log('success'))
